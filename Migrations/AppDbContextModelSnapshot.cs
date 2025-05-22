@@ -20,28 +20,77 @@ namespace RecruitX.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            // === Skills Table ===
             modelBuilder.Entity("RecruitX.Models.Skill", b =>
-                {
-                    b.Property<int>("SkillId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasColumnName("skill_id");
+            {
+                b.Property<int>("SkillId")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("integer")
+                    .HasColumnName("skill_id");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityAlwaysColumn(b.Property<int>("SkillId"));
+                NpgsqlPropertyBuilderExtensions.UseIdentityAlwaysColumn(b.Property<int>("SkillId"));
 
-                    b.Property<string>("SkillName")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)")
-                        .HasColumnName("skill_name");
+                b.Property<string>("SkillName")
+                    .IsRequired()
+                    .HasMaxLength(100)
+                    .HasColumnType("character varying(100)")
+                    .HasColumnName("skill_name");
 
-                    b.HasKey("SkillId");
+                b.HasKey("SkillId");
 
-                    b.HasIndex("SkillName")
-                        .IsUnique();
+                b.HasIndex("SkillName").IsUnique();
 
-                    b.ToTable("skills", (string)null);
-                });
+                b.ToTable("skills", (string)null);
+            });
+
+            // === Clients Table ===
+            modelBuilder.Entity("RecruitX.Models.Clients", b =>
+            {
+                b.Property<int>("Client_Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("integer")
+                    .HasColumnName("client_id");
+
+                NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Client_Id"));
+
+                b.Property<string>("Client_Country")
+                    .HasColumnType("text")
+                    .HasColumnName("client_country");
+
+                b.Property<string>("Client_Name")
+                    .IsRequired()
+                    .HasColumnType("text")
+                    .HasColumnName("client_name");
+
+                b.HasKey("Client_Id");
+
+                b.ToTable("clients", (string)null);
+            });
+
+            // === Locations Table ===
+            modelBuilder.Entity("RecruitX.Models.Locations", b =>
+            {
+                b.Property<int>("Location_Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("integer")
+                    .HasColumnName("location_id");
+
+                NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Location_Id"));
+
+                b.Property<string>("Country")
+                    .HasColumnType("text")
+                    .HasColumnName("country");
+
+                b.Property<string>("Location_Name")
+                    .IsRequired()
+                    .HasColumnType("text")
+                    .HasColumnName("location_name");
+
+                b.HasKey("Location_Id");
+
+                b.ToTable("locations", (string)null);
+            });
+
 #pragma warning restore 612, 618
         }
     }
