@@ -21,64 +21,137 @@ namespace RecruitX.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            // === Skills Table ===
+            modelBuilder.Entity("RecruitX.Models.Skill", b =>
+            {
+                b.Property<int>("SkillId")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("integer")
+                    .HasColumnName("skill_id");
+
+                NpgsqlPropertyBuilderExtensions.UseIdentityAlwaysColumn(b.Property<int>("SkillId"));
+
+                b.Property<string>("SkillName")
+                    .IsRequired()
+                    .HasMaxLength(100)
+                    .HasColumnType("character varying(100)")
+                    .HasColumnName("skill_name");
+
+                b.HasKey("SkillId");
+
+                b.HasIndex("SkillName").IsUnique();
+
+                b.ToTable("skills", (string)null);
+            });
+
+            // === Clients Table ===
+            modelBuilder.Entity("RecruitX.Models.Clients", b =>
+            {
+                b.Property<int>("Client_Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("integer")
+                    .HasColumnName("client_id");
+
+                NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Client_Id"));
+
+                b.Property<string>("Client_Country")
+                    .HasColumnType("text")
+                    .HasColumnName("client_country");
+
+                b.Property<string>("Client_Name")
+                    .IsRequired()
+                    .HasColumnType("text")
+                    .HasColumnName("client_name");
+
+                b.HasKey("Client_Id");
+
+                b.ToTable("clients", (string)null);
+            });
+
+            // === Locations Table ===
+            modelBuilder.Entity("RecruitX.Models.Locations", b =>
+            {
+                b.Property<int>("Location_Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("integer")
+                    .HasColumnName("location_id");
+
+                NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Location_Id"));
+
+                b.Property<string>("Country")
+                    .HasColumnType("text")
+                    .HasColumnName("country");
+
+                b.Property<string>("Location_Name")
+                    .IsRequired()
+                    .HasColumnType("text")
+                    .HasColumnName("location_name");
+
+                b.HasKey("Location_Id");
+
+                b.ToTable("locations", (string)null);
+            });
+
+            // === Employees Table ===
             modelBuilder.Entity("RecruitX.Models.Employee", b =>
-                {
-                    b.Property<int>("EmployeeId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+            {
+                b.Property<int>("EmployeeId")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("integer");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("EmployeeId"));
+                NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("EmployeeId"));
 
-                    b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp with time zone")
-                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+                b.Property<DateTime>("CreatedAt")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("timestamp with time zone")
+                    .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
-                    b.Property<string>("DeliveryUnit")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
+                b.Property<string>("DeliveryUnit")
+                    .IsRequired()
+                    .HasMaxLength(100)
+                    .HasColumnType("character varying(100)");
 
-                    b.Property<string>("Department")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
+                b.Property<string>("Department")
+                    .IsRequired()
+                    .HasMaxLength(100)
+                    .HasColumnType("character varying(100)");
 
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
+                b.Property<string>("Email")
+                    .IsRequired()
+                    .HasMaxLength(100)
+                    .HasColumnType("character varying(100)");
 
-                    b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
+                b.Property<string>("FirstName")
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .HasColumnType("character varying(50)");
 
-                    b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
+                b.Property<string>("LastName")
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .HasColumnType("character varying(50)");
 
-                    b.Property<long?>("Phone")
-                        .HasColumnType("bigint");
+                b.Property<long?>("Phone")
+                    .HasColumnType("bigint");
 
-                    b.Property<string>("Position")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
+                b.Property<string>("Position")
+                    .IsRequired()
+                    .HasMaxLength(100)
+                    .HasColumnType("character varying(100)");
 
-                    b.Property<DateTime>("UpdatedAt")
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("timestamp with time zone")
-                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+                b.Property<DateTime>("UpdatedAt")
+                    .ValueGeneratedOnAddOrUpdate()
+                    .HasColumnType("timestamp with time zone")
+                    .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
-                    b.HasKey("EmployeeId");
+                b.HasKey("EmployeeId");
 
-                    b.HasIndex("Email")
-                        .IsUnique();
+                b.HasIndex("Email")
+                    .IsUnique();
 
-                    b.ToTable("Employees");
-                });
+                b.ToTable("Employees");
+            });
+
 #pragma warning restore 612, 618
         }
     }
