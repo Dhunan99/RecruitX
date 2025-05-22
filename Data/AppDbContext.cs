@@ -9,7 +9,7 @@ public sealed class AppDbContext(DbContextOptions<AppDbContext> options)
     public DbSet<Clients> Clients { get; set; }
     public DbSet<Locations> Locations { get; set; }
     public DbSet<Employee> Employees { get; set; }
-
+    public DbSet<JobRequisition> JobRequisitions { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -98,6 +98,71 @@ public sealed class AppDbContext(DbContextOptions<AppDbContext> options)
             entity.Property(e => e.UpdatedAt)
                 .HasDefaultValueSql("CURRENT_TIMESTAMP")
                 .ValueGeneratedOnAddOrUpdate();
+        });
+        modelBuilder.Entity<JobRequisition>(entity =>
+        {
+            entity.ToTable("job_requisitions");
+
+            entity.HasKey(j => j.JrId);
+            entity.Property(j => j.JrId).ValueGeneratedOnAdd();
+
+            entity.Property(j => j.BusinessUnit).HasMaxLength(50);
+            entity.Property(j => j.RequestedDate);
+            entity.Property(j => j.RequestedBy);
+            entity.Property(j => j.HiringManager);
+            entity.Property(j => j.NumPositions);
+            entity.Property(j => j.WorkShift).HasMaxLength(50);
+            entity.Property(j => j.ExpectedOnboardingDate);
+            entity.Property(j => j.WorkModel).HasMaxLength(50);
+            entity.Property(j => j.Role).IsRequired().HasMaxLength(100);
+            entity.Property(j => j.Qualification).HasMaxLength(100);
+            entity.Property(j => j.TotalExperienceRequired).HasColumnType("decimal(4,2)");
+            entity.Property(j => j.RelevantExperienceRequired).HasColumnType("decimal(4,2)");
+            entity.Property(j => j.LocationId);
+            entity.Property(j => j.JobPurpose);
+            entity.Property(j => j.JobSpecification);
+            entity.Property(j => j.ProjectName).HasMaxLength(100);
+            entity.Property(j => j.ProjectRole).HasMaxLength(100);
+            entity.Property(j => j.OnsiteOpportunity).HasDefaultValue(false);
+            entity.Property(j => j.Billable);
+            entity.Property(j => j.ClientInterview);
+            entity.Property(j => j.ClientId);
+            entity.Property(j => j.ExpectedSalaryRange).HasMaxLength(50);
+            entity.Property(j => j.IdealStartDate);
+            entity.Property(j => j.JdStatus)
+                .HasMaxLength(20)
+                .HasDefaultValue("Pending");
+            entity.Property(j => j.CreatedAt)
+                .HasDefaultValueSql("CURRENT_TIMESTAMP");
+            entity.Property(j => j.CreatedBy);
+
+            entity.HasCheckConstraint("CK_JobRequisitions_JdStatus",
+                "[jd_status] IN ('Pending', 'Draft', 'Completed')");
+
+            entity.HasOne(j => j.RequestedByEmployee)
+                .WithMany()
+                .HasForeignKey(j => j.RequestedBy)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            entity.HasOne(j => j.HiringManagerEmployee)
+                .WithMany()
+                .HasForeignKey(j => j.HiringManager)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            entity.HasOne(j => j.CreatedByEmployee)
+                .WithMany()
+                .HasForeignKey(j => j.CreatedBy)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            entity.HasOne(j => j.Client)
+                .WithMany()
+                .HasForeignKey(j => j.ClientId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            entity.HasOne(j => j.Location)
+                .WithMany()
+                .HasForeignKey(j => j.LocationId)
+                .OnDelete(DeleteBehavior.Restrict);
         });
     }
 }
