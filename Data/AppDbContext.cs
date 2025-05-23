@@ -26,9 +26,9 @@ public sealed class AppDbContext(DbContextOptions<AppDbContext> options)
             entity.ToTable("locations");
 
             entity.HasKey(e => e.Location_Id);
-            entity.Property(e => e.Location_Id).HasColumnName("client_id");
-            entity.Property(e => e.Location_Name).HasColumnName("client_name").IsRequired();
-            entity.Property(e => e.Country).HasColumnName("client_country");
+            entity.Property(e => e.Location_Id).HasColumnName("location_id");
+            entity.Property(e => e.Location_Name).HasColumnName("location_name").IsRequired();
+            entity.Property(e => e.Country).HasColumnName("country");
         });
 
         base.OnModelCreating(modelBuilder);
