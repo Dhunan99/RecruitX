@@ -11,8 +11,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace RecruitX.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250522161926_jrtable")]
-    partial class jrtable
+    [Migration("20250523054257_initial")]
+    partial class initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,7 +24,7 @@ namespace RecruitX.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("RecruitX.Models.Clients", b =>
+            modelBuilder.Entity("RecruitX.Models.Client", b =>
                 {
                     b.Property<int>("Client_Id")
                         .ValueGeneratedOnAdd()
@@ -230,29 +230,26 @@ namespace RecruitX.Migrations
 
                     b.HasIndex("RequestedBy");
 
-                    b.ToTable("job_requisitions", null, t =>
-                        {
-                            t.HasCheckConstraint("CK_JobRequisitions_JdStatus", "[jd_status] IN ('Pending', 'Draft', 'Completed')");
-                        });
+                    b.ToTable("job_requisitions", (string)null);
                 });
 
-            modelBuilder.Entity("RecruitX.Models.Locations", b =>
+            modelBuilder.Entity("RecruitX.Models.Location", b =>
                 {
                     b.Property<int>("Location_Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
-                        .HasColumnName("client_id");
+                        .HasColumnName("location_id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Location_Id"));
 
                     b.Property<string>("Country")
                         .HasColumnType("text")
-                        .HasColumnName("client_country");
+                        .HasColumnName("country");
 
                     b.Property<string>("Location_Name")
                         .IsRequired()
                         .HasColumnType("text")
-                        .HasColumnName("client_name");
+                        .HasColumnName("location_name");
 
                     b.HasKey("Location_Id");
 
@@ -284,7 +281,7 @@ namespace RecruitX.Migrations
 
             modelBuilder.Entity("RecruitX.Models.JobRequisition", b =>
                 {
-                    b.HasOne("RecruitX.Models.Clients", "Client")
+                    b.HasOne("RecruitX.Models.Client", "Client")
                         .WithMany()
                         .HasForeignKey("ClientId")
                         .OnDelete(DeleteBehavior.Restrict);
@@ -299,7 +296,7 @@ namespace RecruitX.Migrations
                         .HasForeignKey("HiringManager")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("RecruitX.Models.Locations", "Location")
+                    b.HasOne("RecruitX.Models.Location", "Location")
                         .WithMany()
                         .HasForeignKey("LocationId")
                         .OnDelete(DeleteBehavior.Restrict);

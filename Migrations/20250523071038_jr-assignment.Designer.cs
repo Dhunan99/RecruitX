@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -10,9 +11,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace RecruitX.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250523071038_jr-assignment")]
+    partial class jrassignment
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -143,62 +146,6 @@ namespace RecruitX.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("employees", (string)null);
-                });
-
-            modelBuilder.Entity("RecruitX.Models.JobDescription", b =>
-                {
-                    b.Property<int>("JdId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasColumnName("jd_id");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("JdId"));
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("created_at");
-
-                    b.Property<int?>("CreatedBy")
-                        .HasColumnType("integer")
-                        .HasColumnName("created_by");
-
-                    b.Property<int?>("CreatedByEmployeeEmployeeId")
-                        .HasColumnType("integer");
-
-                    b.Property<int?>("FillPositions")
-                        .HasColumnType("integer")
-                        .HasColumnName("fill_positions");
-
-                    b.Property<string>("JobDesc")
-                        .HasColumnType("text")
-                        .HasColumnName("job_desc");
-
-                    b.Property<int?>("JobRequisitionJrId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("JrId")
-                        .HasColumnType("integer")
-                        .HasColumnName("jr_id");
-
-                    b.Property<string>("Status")
-                        .HasColumnType("text")
-                        .HasColumnName("status");
-
-                    b.Property<string>("Updates")
-                        .HasColumnType("text")
-                        .HasColumnName("updates");
-
-                    b.HasKey("JdId");
-
-                    b.HasIndex("CreatedBy");
-
-                    b.HasIndex("CreatedByEmployeeEmployeeId");
-
-                    b.HasIndex("JobRequisitionJrId");
-
-                    b.HasIndex("JrId");
-
-                    b.ToTable("job_descriptions", (string)null);
                 });
 
             modelBuilder.Entity("RecruitX.Models.JobRequisition", b =>
@@ -584,31 +531,6 @@ namespace RecruitX.Migrations
                     b.Navigation("Location");
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("RecruitX.Models.JobDescription", b =>
-                {
-                    b.HasOne("RecruitX.Models.Employee", null)
-                        .WithMany()
-                        .HasForeignKey("CreatedBy");
-
-                    b.HasOne("RecruitX.Models.Employee", "CreatedByEmployee")
-                        .WithMany()
-                        .HasForeignKey("CreatedByEmployeeEmployeeId");
-
-                    b.HasOne("RecruitX.Models.JobRequisition", "JobRequisition")
-                        .WithMany()
-                        .HasForeignKey("JobRequisitionJrId");
-
-                    b.HasOne("RecruitX.Models.JobRequisition", null)
-                        .WithMany()
-                        .HasForeignKey("JrId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("CreatedByEmployee");
-
-                    b.Navigation("JobRequisition");
                 });
 
             modelBuilder.Entity("RecruitX.Models.JobRequisition", b =>

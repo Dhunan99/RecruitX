@@ -13,6 +13,11 @@ namespace RecruitX.Models
         public string DeliveryUnit { get; set; }
         public string Department { get; set; }
         public DateTime CreatedAt { get; set; }
+        public int? LocationId { get; set; }  
+        public Location? Location { get; set; }
+
         public DateTime UpdatedAt { get; set; }
+        public long UserId { get; set; } 
+        public User User { get; set; } = null!;
     }
 }

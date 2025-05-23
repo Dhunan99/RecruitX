@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -10,9 +11,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace RecruitX.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250523070514_employee-modification-migration")]
+    partial class employeemodificationmigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -41,7 +44,7 @@ namespace RecruitX.Migrations
 
                     b.HasIndex("SkillId");
 
-                    b.ToTable("job_skill", (string)null);
+                    b.ToTable("JobSkill");
                 });
 
             modelBuilder.Entity("RecruitX.Models.Client", b =>
@@ -143,62 +146,6 @@ namespace RecruitX.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("employees", (string)null);
-                });
-
-            modelBuilder.Entity("RecruitX.Models.JobDescription", b =>
-                {
-                    b.Property<int>("JdId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasColumnName("jd_id");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("JdId"));
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("created_at");
-
-                    b.Property<int?>("CreatedBy")
-                        .HasColumnType("integer")
-                        .HasColumnName("created_by");
-
-                    b.Property<int?>("CreatedByEmployeeEmployeeId")
-                        .HasColumnType("integer");
-
-                    b.Property<int?>("FillPositions")
-                        .HasColumnType("integer")
-                        .HasColumnName("fill_positions");
-
-                    b.Property<string>("JobDesc")
-                        .HasColumnType("text")
-                        .HasColumnName("job_desc");
-
-                    b.Property<int?>("JobRequisitionJrId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("JrId")
-                        .HasColumnType("integer")
-                        .HasColumnName("jr_id");
-
-                    b.Property<string>("Status")
-                        .HasColumnType("text")
-                        .HasColumnName("status");
-
-                    b.Property<string>("Updates")
-                        .HasColumnType("text")
-                        .HasColumnName("updates");
-
-                    b.HasKey("JdId");
-
-                    b.HasIndex("CreatedBy");
-
-                    b.HasIndex("CreatedByEmployeeEmployeeId");
-
-                    b.HasIndex("JobRequisitionJrId");
-
-                    b.HasIndex("JrId");
-
-                    b.ToTable("job_descriptions", (string)null);
                 });
 
             modelBuilder.Entity("RecruitX.Models.JobRequisition", b =>
@@ -326,44 +273,6 @@ namespace RecruitX.Migrations
                     b.HasIndex("RequestedBy");
 
                     b.ToTable("job_requisitions", (string)null);
-                });
-
-            modelBuilder.Entity("RecruitX.Models.JrAssignment", b =>
-                {
-                    b.Property<long>("AssignmentId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasColumnName("assignment_id");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityAlwaysColumn(b.Property<long>("AssignmentId"));
-
-                    b.Property<DateTime>("AssignedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("assigned_at")
-                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
-
-                    b.Property<long>("AssignedBy")
-                        .HasColumnType("bigint")
-                        .HasColumnName("assigned_by");
-
-                    b.Property<long>("AssignedTo")
-                        .HasColumnType("bigint")
-                        .HasColumnName("assigned_to");
-
-                    b.Property<int>("JrId")
-                        .HasColumnType("integer")
-                        .HasColumnName("jr_id");
-
-                    b.HasKey("AssignmentId");
-
-                    b.HasIndex("AssignedBy");
-
-                    b.HasIndex("AssignedTo");
-
-                    b.HasIndex("JrId");
-
-                    b.ToTable("jr_assignments", (string)null);
                 });
 
             modelBuilder.Entity("RecruitX.Models.Location", b =>
@@ -586,31 +495,6 @@ namespace RecruitX.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("RecruitX.Models.JobDescription", b =>
-                {
-                    b.HasOne("RecruitX.Models.Employee", null)
-                        .WithMany()
-                        .HasForeignKey("CreatedBy");
-
-                    b.HasOne("RecruitX.Models.Employee", "CreatedByEmployee")
-                        .WithMany()
-                        .HasForeignKey("CreatedByEmployeeEmployeeId");
-
-                    b.HasOne("RecruitX.Models.JobRequisition", "JobRequisition")
-                        .WithMany()
-                        .HasForeignKey("JobRequisitionJrId");
-
-                    b.HasOne("RecruitX.Models.JobRequisition", null)
-                        .WithMany()
-                        .HasForeignKey("JrId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("CreatedByEmployee");
-
-                    b.Navigation("JobRequisition");
-                });
-
             modelBuilder.Entity("RecruitX.Models.JobRequisition", b =>
                 {
                     b.HasOne("RecruitX.Models.Client", "Client")
@@ -647,33 +531,6 @@ namespace RecruitX.Migrations
                     b.Navigation("Location");
 
                     b.Navigation("RequestedByEmployee");
-                });
-
-            modelBuilder.Entity("RecruitX.Models.JrAssignment", b =>
-                {
-                    b.HasOne("RecruitX.Models.User", "AssignedByUser")
-                        .WithMany()
-                        .HasForeignKey("AssignedBy")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("RecruitX.Models.User", "AssignedToUser")
-                        .WithMany()
-                        .HasForeignKey("AssignedTo")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("RecruitX.Models.JobRequisition", "JobRequisition")
-                        .WithMany()
-                        .HasForeignKey("JrId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("AssignedByUser");
-
-                    b.Navigation("AssignedToUser");
-
-                    b.Navigation("JobRequisition");
                 });
 
             modelBuilder.Entity("RecruitX.Models.OnSiteDetail", b =>
