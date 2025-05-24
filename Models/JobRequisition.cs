@@ -6,7 +6,7 @@
 
     {
 
-        public int JrId { get; set; }
+        public int JobRequisition_Id { get; set; }
 
         public string BusinessUnit { get; set; }
 

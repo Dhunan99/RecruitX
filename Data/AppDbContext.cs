@@ -9,7 +9,8 @@ public sealed class AppDbContext(DbContextOptions<AppDbContext> options)
     public DbSet<Client> Clients { get; set; }
     public DbSet<Location> Locations { get; set; }
     public DbSet<Employee> Employees { get; set; }
-    //public DbSet<JobRequisition> JobRequisitions { get; set; }
+    public DbSet<JobDescription> JobDescriptions { get; set; }
+
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
