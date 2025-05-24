@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -10,9 +11,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace RecruitX.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250523113502_correction3")]
+    partial class correction3
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -23,13 +26,10 @@ namespace RecruitX.Migrations
 
             modelBuilder.Entity("JobSkill", b =>
                 {
-                    b.Property<int>("JobSkill_Id")
-                        .ValueGeneratedOnAdd()
+                    b.Property<int>("JobRequisition_Id")
                         .HasColumnType("integer");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("JobSkill_Id"));
-
-                    b.Property<int>("JobRequisition_Id")
+                    b.Property<int>("JobSkill_Id")
                         .HasColumnType("integer");
 
                     b.Property<int>("SkillId")
@@ -42,9 +42,7 @@ namespace RecruitX.Migrations
                         .HasColumnType("character varying(20)")
                         .HasDefaultValue("Pending");
 
-                    b.HasKey("JobSkill_Id");
-
-                    b.HasIndex("JobRequisition_Id");
+                    b.HasKey("JobRequisition_Id", "JobSkill_Id");
 
                     b.HasIndex("SkillId");
 

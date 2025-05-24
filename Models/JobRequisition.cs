@@ -1,12 +1,14 @@
-﻿namespace RecruitX.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace RecruitX.Models
 
 {
 
     public class JobRequisition
 
     {
-
-        public int JrId { get; set; }
+        [Key]
+        public int JobRequisition_Id { get; set; }
 
         public string BusinessUnit { get; set; }
 

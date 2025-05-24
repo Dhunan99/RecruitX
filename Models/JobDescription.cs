@@ -3,7 +3,7 @@
     public class JobDescription
     {
         public int JdId { get; set; }
-        public int JrId { get; set; }
+        public int JobRequisition_Id { get; set; }
         public string? Status { get; set; }
         public string? JobDesc { get; set; }
         public int? FillPositions { get; set; }

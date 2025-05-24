@@ -9,7 +9,12 @@ public sealed class AppDbContext(DbContextOptions<AppDbContext> options)
     public DbSet<Client> Clients { get; set; }
     public DbSet<Location> Locations { get; set; }
     public DbSet<Employee> Employees { get; set; }
-    //public DbSet<JobRequisition> JobRequisitions { get; set; }
+    public DbSet<JobRequisition> JobRequisitions { get; set; }
+    
+    public DbSet<JobDescription> JobDescriptions { get; set; }
+    public DbSet<User> Users { get; set; }
+    public DbSet<OnSiteDetail> OnSiteDetails { get; set; }
+
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -163,8 +168,8 @@ public sealed class AppDbContext(DbContextOptions<AppDbContext> options)
         {
             entity.ToTable("job_requisitions");
 
-            entity.HasKey(j => j.JrId);
-            entity.Property(j => j.JrId).ValueGeneratedOnAdd();
+            entity.HasKey(j => j.JobRequisition_Id);
+            entity.Property(j => j.JobRequisition_Id).ValueGeneratedOnAdd();
 
             entity.Property(j => j.BusinessUnit).HasMaxLength(50);
             entity.Property(j => j.RequestedDate);
@@ -253,9 +258,17 @@ public sealed class AppDbContext(DbContextOptions<AppDbContext> options)
         modelBuilder.Entity<JobSkill>(entity =>
         {
             entity.ToTable("job_skill");
-            entity.HasKey(js => new { js.JrId, js.SkillId });
+            entity.Property(js => js.SkillType)
+                .HasMaxLength(20)
+                .HasDefaultValue("Pending");
+            entity.HasKey(e => e.JobSkill_Id);
 
+
+            entity.HasOne(js => js.Skill)
+                .WithMany() // or .WithMany(s => s.JobSkills)
+                .HasForeignKey(js => js.SkillId);
         });
+
         modelBuilder.Entity<JrAssignment>(entity =>
         {
             entity.ToTable("jr_assignments");
@@ -266,7 +279,7 @@ public sealed class AppDbContext(DbContextOptions<AppDbContext> options)
                   .HasColumnName("assignment_id")
                   .UseIdentityAlwaysColumn(); // PostgreSQL identity column
 
-            entity.Property(e => e.JrId)
+            entity.Property(e => e.JobRequisition_Id)
                   .HasColumnName("jr_id")
                   .IsRequired();
 
@@ -285,7 +298,7 @@ public sealed class AppDbContext(DbContextOptions<AppDbContext> options)
             // Foreign Keys
             entity.HasOne(e => e.JobRequisition)
                   .WithMany()
-                  .HasForeignKey(e => e.JrId)
+                  .HasForeignKey(e => e.JobRequisition_Id)
                   .OnDelete(DeleteBehavior.Restrict);
 
             entity.HasOne(e => e.AssignedToUser)
@@ -305,7 +318,7 @@ public sealed class AppDbContext(DbContextOptions<AppDbContext> options)
             entity.HasKey(e => e.JdId);
             entity.Property(e => e.JdId).HasColumnName("jd_id");
 
-            entity.Property(e => e.JrId).HasColumnName("jr_id");
+            entity.Property(e => e.JobRequisition_Id).HasColumnName("jr_id");
             entity.Property(e => e.Status).HasColumnName("status").HasConversion<string>();
             ;
             entity.Property(e => e.JobDesc).HasColumnName("job_desc");
@@ -316,7 +329,7 @@ public sealed class AppDbContext(DbContextOptions<AppDbContext> options)
 
             entity.HasOne<JobRequisition>()
                 .WithMany()
-                .HasForeignKey(e => e.JrId);
+                .HasForeignKey(e => e.JobRequisition_Id);
 
             entity.HasOne<Employee>()
                 .WithMany()

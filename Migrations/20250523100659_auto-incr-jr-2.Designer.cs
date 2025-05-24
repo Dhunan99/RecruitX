@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -10,9 +11,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace RecruitX.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250523100659_auto-incr-jr-2")]
+    partial class autoincrjr2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -23,26 +26,19 @@ namespace RecruitX.Migrations
 
             modelBuilder.Entity("JobSkill", b =>
                 {
-                    b.Property<int>("JobSkill_Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("JobSkill_Id"));
-
-                    b.Property<int>("JobRequisition_Id")
+                    b.Property<int>("JrId")
                         .HasColumnType("integer");
 
                     b.Property<int>("SkillId")
                         .HasColumnType("integer");
 
-                    b.Property<string>("SkillType")
-                        .IsRequired()
-                        .ValueGeneratedOnAdd()
-                        .HasMaxLength(20)
-                        .HasColumnType("character varying(20)")
-                        .HasDefaultValue("Pending");
+                    b.Property<int>("JobRequisition_Id")
+                        .HasColumnType("integer");
 
-                    b.HasKey("JobSkill_Id");
+                    b.Property<int>("SkillType")
+                        .HasColumnType("integer");
+
+                    b.HasKey("JrId", "SkillId");
 
                     b.HasIndex("JobRequisition_Id");
 
@@ -180,12 +176,12 @@ namespace RecruitX.Migrations
                         .HasColumnType("text")
                         .HasColumnName("job_desc");
 
-                    b.Property<int>("JobRequisition_Id")
+                    b.Property<int?>("JobRequisition_Id")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("JrId")
                         .HasColumnType("integer")
                         .HasColumnName("jr_id");
-
-                    b.Property<int?>("JobRequisition_Id1")
-                        .HasColumnType("integer");
 
                     b.Property<string>("Status")
                         .HasColumnType("text")
@@ -203,7 +199,7 @@ namespace RecruitX.Migrations
 
                     b.HasIndex("JobRequisition_Id");
 
-                    b.HasIndex("JobRequisition_Id1");
+                    b.HasIndex("JrId");
 
                     b.ToTable("job_descriptions", (string)null);
                 });
@@ -358,7 +354,7 @@ namespace RecruitX.Migrations
                         .HasColumnType("bigint")
                         .HasColumnName("assigned_to");
 
-                    b.Property<int>("JobRequisition_Id")
+                    b.Property<int>("JrId")
                         .HasColumnType("integer")
                         .HasColumnName("jr_id");
 
@@ -368,7 +364,7 @@ namespace RecruitX.Migrations
 
                     b.HasIndex("AssignedTo");
 
-                    b.HasIndex("JobRequisition_Id");
+                    b.HasIndex("JrId");
 
                     b.ToTable("jr_assignments", (string)null);
                 });
@@ -603,15 +599,15 @@ namespace RecruitX.Migrations
                         .WithMany()
                         .HasForeignKey("CreatedByEmployeeEmployeeId");
 
-                    b.HasOne("RecruitX.Models.JobRequisition", null)
-                        .WithMany()
-                        .HasForeignKey("JobRequisition_Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("RecruitX.Models.JobRequisition", "JobRequisition")
                         .WithMany()
-                        .HasForeignKey("JobRequisition_Id1");
+                        .HasForeignKey("JobRequisition_Id");
+
+                    b.HasOne("RecruitX.Models.JobRequisition", null)
+                        .WithMany()
+                        .HasForeignKey("JrId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("CreatedByEmployee");
 
@@ -672,7 +668,7 @@ namespace RecruitX.Migrations
 
                     b.HasOne("RecruitX.Models.JobRequisition", "JobRequisition")
                         .WithMany()
-                        .HasForeignKey("JobRequisition_Id")
+                        .HasForeignKey("JrId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 

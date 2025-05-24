@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -10,9 +11,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace RecruitX.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250523114237_correction4")]
+    partial class correction4
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -32,6 +35,9 @@ namespace RecruitX.Migrations
                     b.Property<int>("JobRequisition_Id")
                         .HasColumnType("integer");
 
+                    b.Property<int>("JobRequisition_Id1")
+                        .HasColumnType("integer");
+
                     b.Property<int>("SkillId")
                         .HasColumnType("integer");
 
@@ -44,7 +50,7 @@ namespace RecruitX.Migrations
 
                     b.HasKey("JobSkill_Id");
 
-                    b.HasIndex("JobRequisition_Id");
+                    b.HasIndex("JobRequisition_Id1");
 
                     b.HasIndex("SkillId");
 
@@ -560,7 +566,7 @@ namespace RecruitX.Migrations
                 {
                     b.HasOne("RecruitX.Models.JobRequisition", "JobRequisition")
                         .WithMany()
-                        .HasForeignKey("JobRequisition_Id")
+                        .HasForeignKey("JobRequisition_Id1")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
