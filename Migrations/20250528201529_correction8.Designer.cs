@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -10,9 +11,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace RecruitX.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250528201529_correction8")]
+    partial class correction8
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -26,7 +29,7 @@ namespace RecruitX.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
-                        .HasColumnName("Id");
+                        .HasColumnName("job_skills_id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
@@ -47,7 +50,7 @@ namespace RecruitX.Migrations
                         .HasColumnName("skill_type");
 
                     b.HasKey("Id")
-                        .HasName("Id");
+                        .HasName("pk_job_skills_id");
 
                     b.HasIndex("JobRequisitionId");
 
@@ -56,135 +59,12 @@ namespace RecruitX.Migrations
                     b.ToTable("job_skills", (string)null);
                 });
 
-            modelBuilder.Entity("RecruitX.Models.Application", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasColumnName("Id");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityAlwaysColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("CandidateId")
-                        .HasColumnType("integer")
-                        .HasColumnName("candidate_id");
-
-                    b.Property<int?>("CreatedBy")
-                        .HasColumnType("integer")
-                        .HasColumnName("created_by");
-
-                    b.Property<short>("ExperienceMonths")
-                        .HasColumnType("smallint")
-                        .HasColumnName("experience_months");
-
-                    b.Property<short>("ExperienceYears")
-                        .HasColumnType("smallint")
-                        .HasColumnName("experience_years");
-
-                    b.Property<int>("JobDescriptionId")
-                        .HasColumnType("integer")
-                        .HasColumnName("jd_id");
-
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .ValueGeneratedOnAdd()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)")
-                        .HasDefaultValue("Applied")
-                        .HasColumnName("status");
-
-                    b.Property<DateTime?>("SubmittedOn")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("submitted_on");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CreatedBy");
-
-                    b.HasIndex("JobDescriptionId");
-
-                    b.HasIndex("CandidateId", "JobDescriptionId");
-
-                    b.ToTable("applications", null, t =>
-                        {
-                            t.HasCheckConstraint("CK_Application_ExperienceMonths", "experience_months >= 0 AND experience_months <= 11");
-                        });
-                });
-
-            modelBuilder.Entity("RecruitX.Models.ApplicationSkill", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasColumnName("Id");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityAlwaysColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("ApplicationId")
-                        .HasColumnType("integer")
-                        .HasColumnName("application_id");
-
-                    b.Property<int>("SkillId")
-                        .HasColumnType("integer")
-                        .HasColumnName("skill_id");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("SkillId");
-
-                    b.HasIndex("ApplicationId", "SkillId")
-                        .IsUnique()
-                        .HasDatabaseName("uq_application_skills_application_skill");
-
-                    b.ToTable("application_skills", (string)null);
-                });
-
-            modelBuilder.Entity("RecruitX.Models.ApplicationStatusHistory", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasColumnName("Id");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("ApplicationId")
-                        .HasColumnType("integer")
-                        .HasColumnName("application_id");
-
-                    b.Property<DateTime>("ChangedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("changed_at")
-                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
-
-                    b.Property<int?>("ChangedBy")
-                        .HasColumnType("integer")
-                        .HasColumnName("changed_by");
-
-                    b.Property<int>("NewStatus")
-                        .HasColumnType("integer")
-                        .HasColumnName("new_status_id");
-
-                    b.Property<int?>("OldStatus")
-                        .HasColumnType("integer")
-                        .HasColumnName("old_status_id");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ApplicationId");
-
-                    b.HasIndex("ChangedBy");
-
-                    b.ToTable("application_status_history", (string)null);
-                });
-
             modelBuilder.Entity("RecruitX.Models.Candidate", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
-                        .HasColumnName("Id");
+                        .HasColumnName("candidate_id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
@@ -288,7 +168,7 @@ namespace RecruitX.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
-                        .HasColumnName("Id");
+                        .HasColumnName("client_id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
@@ -306,104 +186,12 @@ namespace RecruitX.Migrations
                     b.ToTable("Clients", (string)null);
                 });
 
-            modelBuilder.Entity("RecruitX.Models.Department", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Department");
-                });
-
-            modelBuilder.Entity("RecruitX.Models.EmailTemplate", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasColumnName("Id");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Body")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamptz")
-                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
-
-                    b.Property<int>("CreatedBy")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
-
-                    b.Property<string>("Subject")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("character varying(200)");
-
-                    b.Property<int>("UserType")
-                        .HasMaxLength(50)
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CreatedBy");
-
-                    b.ToTable("email_template", (string)null);
-                });
-
-            modelBuilder.Entity("RecruitX.Models.EmailTemplateVariable", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasColumnName("Id");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("created_at")
-                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
-
-                    b.Property<int>("TemplateId")
-                        .HasColumnType("integer")
-                        .HasColumnName("template_id");
-
-                    b.Property<string>("VariableName")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)")
-                        .HasColumnName("variable_name");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("TemplateId", "VariableName")
-                        .IsUnique();
-
-                    b.ToTable("email_template_variables", (string)null);
-                });
-
             modelBuilder.Entity("RecruitX.Models.Employee", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
-                        .HasColumnName("Id");
+                        .HasColumnName("employee_id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
@@ -413,9 +201,17 @@ namespace RecruitX.Migrations
                         .HasColumnName("created_at")
                         .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
-                    b.Property<int>("DepartmentId")
-                        .HasColumnType("integer")
-                        .HasColumnName("department_id");
+                    b.Property<string>("DeliveryUnit")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
+                        .HasColumnName("delivery_unit");
+
+                    b.Property<string>("Department")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
+                        .HasColumnName("department");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -457,161 +253,9 @@ namespace RecruitX.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("DepartmentId");
-
                     b.HasIndex("LocationId");
 
                     b.ToTable("employees", (string)null);
-                });
-
-            modelBuilder.Entity("RecruitX.Models.EvaluationToken", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasColumnName("Id");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("created_at")
-                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
-
-                    b.Property<int>("InterviewId")
-                        .HasColumnType("integer")
-                        .HasColumnName("interview_id");
-
-                    b.Property<bool>("IsUsed")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("boolean")
-                        .HasDefaultValue(false)
-                        .HasColumnName("is_used");
-
-                    b.Property<string>("Token")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("character varying(20)")
-                        .HasColumnName("token");
-
-                    b.Property<DateTime?>("UsedAt")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("used_at");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("InterviewId")
-                        .IsUnique();
-
-                    b.HasIndex("Token")
-                        .IsUnique();
-
-                    b.ToTable("evaluation_tokens", (string)null);
-                });
-
-            modelBuilder.Entity("RecruitX.Models.Interview", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasColumnName("Id");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("ApplicationId")
-                        .HasColumnType("integer")
-                        .HasColumnName("application_id");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("created_at")
-                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
-
-                    b.Property<int?>("CreatedBy")
-                        .HasColumnType("integer")
-                        .HasColumnName("created_by");
-
-                    b.Property<string>("EvaluationDetails")
-                        .HasColumnType("text")
-                        .HasColumnName("evaluation");
-
-                    b.Property<bool>("IsTechnicalRound")
-                        .HasColumnType("boolean");
-
-                    b.Property<DateTime>("ScheduledAt")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("scheduled_at");
-
-                    b.Property<DateTime>("ScheduledTo")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("scheduled_to");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("integer")
-                        .HasColumnName("status_id");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ApplicationId");
-
-                    b.HasIndex("CreatedBy");
-
-                    b.ToTable("interviews", (string)null);
-                });
-
-            modelBuilder.Entity("RecruitX.Models.InterviewPanel", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasColumnName("Id");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("EmployeeId")
-                        .HasColumnType("integer")
-                        .HasColumnName("employee_id");
-
-                    b.Property<int>("InterviewId")
-                        .HasColumnType("integer")
-                        .HasColumnName("interview_id");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("EmployeeId");
-
-                    b.HasIndex("InterviewId", "EmployeeId")
-                        .IsUnique();
-
-                    b.ToTable("interview_panel", (string)null);
-                });
-
-            modelBuilder.Entity("RecruitX.Models.InterviewerGroup", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasColumnName("Id");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<int?>("DepartmentId")
-                        .HasColumnType("integer")
-                        .HasColumnName("delivery_unit");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)")
-                        .HasColumnName("name");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("DepartmentId");
-
-                    b.ToTable("interviewer_group", (string)null);
                 });
 
             modelBuilder.Entity("RecruitX.Models.JobDescription", b =>
@@ -619,7 +263,7 @@ namespace RecruitX.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
-                        .HasColumnName("Id");
+                        .HasColumnName("jd_id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
@@ -630,6 +274,9 @@ namespace RecruitX.Migrations
                     b.Property<int?>("CreatedBy")
                         .HasColumnType("integer")
                         .HasColumnName("created_by");
+
+                    b.Property<int?>("CreatedByEmployeeId")
+                        .HasColumnType("integer");
 
                     b.Property<int?>("FilledPositions")
                         .HasColumnType("integer")
@@ -653,6 +300,8 @@ namespace RecruitX.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CreatedBy");
+
+                    b.HasIndex("CreatedByEmployeeId");
 
                     b.HasIndex("JobRequisitionId");
 
@@ -731,9 +380,6 @@ namespace RecruitX.Migrations
                     b.Property<int?>("NumPositions")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("OnSiteDetailId")
-                        .HasColumnType("integer");
-
                     b.Property<string>("ProjectName")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -800,8 +446,6 @@ namespace RecruitX.Migrations
 
                     b.HasIndex("LocationId");
 
-                    b.HasIndex("OnSiteDetailId");
-
                     b.HasIndex("RequestedBy");
 
                     b.ToTable("job_requisitions", (string)null);
@@ -812,7 +456,7 @@ namespace RecruitX.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
-                        .HasColumnName("Id");
+                        .HasColumnName("assignment_id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityAlwaysColumn(b.Property<int>("Id"));
 
@@ -845,28 +489,12 @@ namespace RecruitX.Migrations
                     b.ToTable("jr_assignments", (string)null);
                 });
 
-            modelBuilder.Entity("RecruitX.Models.LeadToRecruiter", b =>
-                {
-                    b.Property<int>("Id")
-                        .HasColumnType("integer")
-                        .HasColumnName("Id");
-
-                    b.Property<int>("RecruiterId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id", "RecruiterId");
-
-                    b.HasIndex("RecruiterId");
-
-                    b.ToTable("lead_to_recruiter", (string)null);
-                });
-
             modelBuilder.Entity("RecruitX.Models.Location", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
-                        .HasColumnName("Id");
+                        .HasColumnName("location_id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
@@ -884,50 +512,12 @@ namespace RecruitX.Migrations
                     b.ToTable("locations", (string)null);
                 });
 
-            modelBuilder.Entity("RecruitX.Models.Notification", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasColumnName("Id");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Content")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamptz")
-                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
-
-                    b.Property<bool>("IsRead")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("boolean")
-                        .HasDefaultValue(false);
-
-                    b.Property<string>("Type")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("notifications", (string)null);
-                });
-
             modelBuilder.Entity("RecruitX.Models.OnSiteDetail", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
-                        .HasColumnName("Id");
+                        .HasColumnName("onsite_detail_id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
@@ -1013,39 +603,12 @@ namespace RecruitX.Migrations
                     b.ToTable("on_site_details", (string)null);
                 });
 
-            modelBuilder.Entity("RecruitX.Models.PanelToGroup", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasColumnName("id");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("EmployeeId")
-                        .HasColumnType("integer")
-                        .HasColumnName("employee_id");
-
-                    b.Property<int>("GroupId")
-                        .HasColumnType("integer")
-                        .HasColumnName("Id");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("EmployeeId");
-
-                    b.HasIndex("GroupId", "EmployeeId")
-                        .IsUnique();
-
-                    b.ToTable("panel_to_group", (string)null);
-                });
-
             modelBuilder.Entity("RecruitX.Models.Role", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
-                        .HasColumnName("Id");
+                        .HasColumnName("role_id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
@@ -1065,7 +628,7 @@ namespace RecruitX.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
-                        .HasColumnName("Id");
+                        .HasColumnName("skill_id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityAlwaysColumn(b.Property<int>("Id"));
 
@@ -1088,7 +651,7 @@ namespace RecruitX.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
-                        .HasColumnName("Id");
+                        .HasColumnName("user_id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityAlwaysColumn(b.Property<int>("Id"));
 
@@ -1167,73 +730,6 @@ namespace RecruitX.Migrations
                     b.Navigation("Skill");
                 });
 
-            modelBuilder.Entity("RecruitX.Models.Application", b =>
-                {
-                    b.HasOne("RecruitX.Models.Candidate", "Candidate")
-                        .WithMany("Applications")
-                        .HasForeignKey("CandidateId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired()
-                        .HasConstraintName("fk_applications_candidate_id");
-
-                    b.HasOne("User", "CreatedByUser")
-                        .WithMany()
-                        .HasForeignKey("CreatedBy")
-                        .OnDelete(DeleteBehavior.SetNull)
-                        .HasConstraintName("fk_applications_created_by");
-
-                    b.HasOne("RecruitX.Models.JobDescription", "JobDescription")
-                        .WithMany("Applications")
-                        .HasForeignKey("JobDescriptionId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired()
-                        .HasConstraintName("fk_applications_jd_id");
-
-                    b.Navigation("Candidate");
-
-                    b.Navigation("CreatedByUser");
-
-                    b.Navigation("JobDescription");
-                });
-
-            modelBuilder.Entity("RecruitX.Models.ApplicationSkill", b =>
-                {
-                    b.HasOne("RecruitX.Models.Application", "Application")
-                        .WithMany("ApplicationSkills")
-                        .HasForeignKey("ApplicationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_application_skills_application_id");
-
-                    b.HasOne("RecruitX.Models.Skill", "Skill")
-                        .WithMany()
-                        .HasForeignKey("SkillId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired()
-                        .HasConstraintName("fk_application_skills_skill_id");
-
-                    b.Navigation("Application");
-
-                    b.Navigation("Skill");
-                });
-
-            modelBuilder.Entity("RecruitX.Models.ApplicationStatusHistory", b =>
-                {
-                    b.HasOne("RecruitX.Models.Application", "Application")
-                        .WithMany()
-                        .HasForeignKey("ApplicationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("User", "ChangedByUser")
-                        .WithMany()
-                        .HasForeignKey("ChangedBy");
-
-                    b.Navigation("Application");
-
-                    b.Navigation("ChangedByUser");
-                });
-
             modelBuilder.Entity("RecruitX.Models.Candidate", b =>
                 {
                     b.HasOne("RecruitX.Models.Location", "CurrentLocation")
@@ -1251,109 +747,25 @@ namespace RecruitX.Migrations
                     b.Navigation("PreferredLocation");
                 });
 
-            modelBuilder.Entity("RecruitX.Models.EmailTemplate", b =>
-                {
-                    b.HasOne("User", "Creator")
-                        .WithMany()
-                        .HasForeignKey("CreatedBy")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Creator");
-                });
-
-            modelBuilder.Entity("RecruitX.Models.EmailTemplateVariable", b =>
-                {
-                    b.HasOne("RecruitX.Models.EmailTemplate", "Template")
-                        .WithMany()
-                        .HasForeignKey("TemplateId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Template");
-                });
-
             modelBuilder.Entity("RecruitX.Models.Employee", b =>
                 {
-                    b.HasOne("RecruitX.Models.Department", "Department")
-                        .WithMany("Employees")
-                        .HasForeignKey("DepartmentId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired()
-                        .HasConstraintName("fk_employees_department_id");
-
                     b.HasOne("RecruitX.Models.Location", "Location")
                         .WithMany()
                         .HasForeignKey("LocationId")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.Navigation("Department");
-
                     b.Navigation("Location");
-                });
-
-            modelBuilder.Entity("RecruitX.Models.EvaluationToken", b =>
-                {
-                    b.HasOne("RecruitX.Models.Interview", "Interview")
-                        .WithOne()
-                        .HasForeignKey("RecruitX.Models.EvaluationToken", "InterviewId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Interview");
-                });
-
-            modelBuilder.Entity("RecruitX.Models.Interview", b =>
-                {
-                    b.HasOne("RecruitX.Models.Application", "Application")
-                        .WithMany()
-                        .HasForeignKey("ApplicationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("User", "Creator")
-                        .WithMany()
-                        .HasForeignKey("CreatedBy");
-
-                    b.Navigation("Application");
-
-                    b.Navigation("Creator");
-                });
-
-            modelBuilder.Entity("RecruitX.Models.InterviewPanel", b =>
-                {
-                    b.HasOne("RecruitX.Models.Employee", "Employee")
-                        .WithMany()
-                        .HasForeignKey("EmployeeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("RecruitX.Models.Interview", "Interview")
-                        .WithMany("InterviewPanels")
-                        .HasForeignKey("InterviewId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Employee");
-
-                    b.Navigation("Interview");
-                });
-
-            modelBuilder.Entity("RecruitX.Models.InterviewerGroup", b =>
-                {
-                    b.HasOne("RecruitX.Models.Department", "Department")
-                        .WithMany()
-                        .HasForeignKey("DepartmentId");
-
-                    b.Navigation("Department");
                 });
 
             modelBuilder.Entity("RecruitX.Models.JobDescription", b =>
                 {
-                    b.HasOne("User", "CreatedByUser")
+                    b.HasOne("RecruitX.Models.Employee", null)
                         .WithMany()
-                        .HasForeignKey("CreatedBy")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .HasForeignKey("CreatedBy");
+
+                    b.HasOne("RecruitX.Models.Employee", "CreatedByEmployee")
+                        .WithMany()
+                        .HasForeignKey("CreatedByEmployeeId");
 
                     b.HasOne("RecruitX.Models.JobRequisition", null)
                         .WithMany()
@@ -1365,7 +777,7 @@ namespace RecruitX.Migrations
                         .WithMany()
                         .HasForeignKey("JobRequisitionId1");
 
-                    b.Navigation("CreatedByUser");
+                    b.Navigation("CreatedByEmployee");
 
                     b.Navigation("JobRequisition");
                 });
@@ -1392,10 +804,6 @@ namespace RecruitX.Migrations
                         .HasForeignKey("LocationId")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("RecruitX.Models.OnSiteDetail", "OnSiteDetail")
-                        .WithMany()
-                        .HasForeignKey("OnSiteDetailId");
-
                     b.HasOne("RecruitX.Models.Employee", "RequestedByEmployee")
                         .WithMany()
                         .HasForeignKey("RequestedBy")
@@ -1408,8 +816,6 @@ namespace RecruitX.Migrations
                     b.Navigation("HiringManagerEmployee");
 
                     b.Navigation("Location");
-
-                    b.Navigation("OnSiteDetail");
 
                     b.Navigation("RequestedByEmployee");
                 });
@@ -1441,36 +847,6 @@ namespace RecruitX.Migrations
                     b.Navigation("JobRequisition");
                 });
 
-            modelBuilder.Entity("RecruitX.Models.LeadToRecruiter", b =>
-                {
-                    b.HasOne("User", "Lead")
-                        .WithMany()
-                        .HasForeignKey("Id")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("User", "Recruiter")
-                        .WithMany()
-                        .HasForeignKey("RecruiterId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Lead");
-
-                    b.Navigation("Recruiter");
-                });
-
-            modelBuilder.Entity("RecruitX.Models.Notification", b =>
-                {
-                    b.HasOne("User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("RecruitX.Models.OnSiteDetail", b =>
                 {
                     b.HasOne("RecruitX.Models.JobRequisition", "JobRequisition")
@@ -1483,25 +859,6 @@ namespace RecruitX.Migrations
                     b.Navigation("JobRequisition");
                 });
 
-            modelBuilder.Entity("RecruitX.Models.PanelToGroup", b =>
-                {
-                    b.HasOne("RecruitX.Models.Employee", "Employee")
-                        .WithMany()
-                        .HasForeignKey("EmployeeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("RecruitX.Models.InterviewerGroup", "Group")
-                        .WithMany("PanelMembers")
-                        .HasForeignKey("GroupId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Employee");
-
-                    b.Navigation("Group");
-                });
-
             modelBuilder.Entity("User", b =>
                 {
                     b.HasOne("RecruitX.Models.Employee", "Employee")
@@ -1512,39 +869,9 @@ namespace RecruitX.Migrations
                     b.Navigation("Employee");
                 });
 
-            modelBuilder.Entity("RecruitX.Models.Application", b =>
-                {
-                    b.Navigation("ApplicationSkills");
-                });
-
-            modelBuilder.Entity("RecruitX.Models.Candidate", b =>
-                {
-                    b.Navigation("Applications");
-                });
-
-            modelBuilder.Entity("RecruitX.Models.Department", b =>
-                {
-                    b.Navigation("Employees");
-                });
-
             modelBuilder.Entity("RecruitX.Models.Employee", b =>
                 {
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("RecruitX.Models.Interview", b =>
-                {
-                    b.Navigation("InterviewPanels");
-                });
-
-            modelBuilder.Entity("RecruitX.Models.InterviewerGroup", b =>
-                {
-                    b.Navigation("PanelMembers");
-                });
-
-            modelBuilder.Entity("RecruitX.Models.JobDescription", b =>
-                {
-                    b.Navigation("Applications");
                 });
 
             modelBuilder.Entity("RecruitX.Models.JobRequisition", b =>
