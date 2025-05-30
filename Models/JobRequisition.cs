@@ -81,7 +81,6 @@ namespace RecruitX.Models
 
         public Location Location { get; set; }
         public ICollection<JobSkill> JobSkills { get; set; } = new List<JobSkill>();
-        public OnSiteDetail? OnSiteDetail { get; set; }  // One-to-one
 
 
 

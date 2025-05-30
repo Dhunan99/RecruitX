@@ -51,11 +51,6 @@ namespace RecruitX.Models.Config
             entity.Property(j => j.CreatedAt)
                 .HasDefaultValueSql("CURRENT_TIMESTAMP");
             entity.Property(j => j.CreatedBy);
-            entity.HasOne(j => j.OnSiteDetail)
-                  .WithOne(o => o.JobRequisition)
-                  .HasForeignKey<OnSiteDetail>(o => o.JrId)
-                  .OnDelete(DeleteBehavior.Cascade)
-                  .HasConstraintName("FK_JobRequisition_OnSiteDetail");
 
 
             entity.HasOne(j => j.RequestedByEmployee)

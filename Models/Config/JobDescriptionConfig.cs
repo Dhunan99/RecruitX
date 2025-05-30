@@ -18,7 +18,9 @@ namespace RecruitX.Models.Config
             entity.Property(e => e.JobDesc).HasColumnName("job_desc");
             entity.Property(e => e.FilledPositions).HasColumnName("fill_positions");
             entity.Property(e => e.Updates).HasColumnName("updates");
-            entity.Property(e => e.CreatedAt).HasColumnName("created_at");
+            entity.Property(e => e.CreatedAt)
+                .HasColumnName("created_at")
+                .HasDefaultValueSql("CURRENT_TIMESTAMP");
             entity.Property(e => e.CreatedBy).HasColumnName("created_by");
 
             entity.HasOne<JobRequisition>()
